@@ -33,11 +33,11 @@ canvas.grid(row = 0, column = 0, columnspan = 2)
 
 wrong_image = PhotoImage(file="..\Flash Card App\images\wrong.png")
 
-unknown_button = Button(window, command=lambda: print("Unknown Button pressed"), image=wrong_image)
+unknown_button = Button(window, command=lambda: print("Unknown Button pressed"), image=wrong_image, highlightthickness=0)
 unknown_button.grid(row = 1, column = 0)
 
 right_image = PhotoImage(file="..\Flash Card App\images\\right.png")
-known_button = Button(window, command=lambda: print("Known Button pressed"), image=right_image)
+known_button = Button(window, command=lambda: print("Known Button pressed"), image=right_image, highlightthickness=0)
 known_button.grid(row = 1, column = 1)
 
 window.mainloop()
