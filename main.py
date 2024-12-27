@@ -1,5 +1,4 @@
 
-
 import pandas
 from tkinter import *
 import random
@@ -8,15 +7,18 @@ BACKGROUND_COLOR = "#B1DDC6"
 
 # +------------------------------         Data        ------------------------------------+
 
-data = pandas.read_csv("data/french_words.csv")
+try:
+    data = pandas.read_csv("data/words_to_learn.csv")
+except FileNotFoundError:
+    data = pandas.read_csv("data/french_words.csv")
 
 list_of_french_words = data['French'].to_list()
 
 list_of_english_words = data['English'].to_list()
 
 list_French_English = list(zip(list_of_french_words, list_of_english_words))
-
 print(list_French_English)
+
 
 current_word = []
 # +----------------------------------          Functions           --------------------------------+
@@ -45,6 +47,18 @@ def flip_card():
     canvas.itemconfig(card_title, text="English", font=("Arial", 40, "italic"), fill="white")
     canvas.itemconfig(card_word, text=translated_word, font=("Arial", 60, "bold"), fill="white")
     canvas.itemconfig(card_background, image=card_back_image)
+
+def unknown_button_pressed():
+    next_card()
+
+def known_button_pressed():
+    if current_word in list_French_English:
+        list_French_English.remove(current_word)
+    print(len(list_French_English))
+    words_to_learn = pandas.DataFrame(list_French_English, columns=["French", "English"])
+    words_to_learn.to_csv('data/words_to_learn.csv', index=False)
+
+    next_card()
 
 # +-------------------------------      GUI           -----------------------------------------------+
 
@@ -84,17 +98,14 @@ canvas.grid(row = 0, column = 0, columnspan = 2)
 
 wrong_image = PhotoImage(file="..\Flash Card App\images\wrong.png")
 
-unknown_button = Button(window, command=next_card, image=wrong_image, highlightthickness=0)
+unknown_button = Button(window, command=unknown_button_pressed, image=wrong_image, highlightthickness=0)
 unknown_button.grid(row = 1, column = 0)
 
 right_image = PhotoImage(file="..\Flash Card App\images\\right.png")
-known_button = Button(window, command=next_card, image=right_image, highlightthickness=0)
+known_button = Button(window, command=known_button_pressed, image=right_image, highlightthickness=0)
 known_button.grid(row = 1, column = 1)
 
 next_card()
-
-
-
 
 
 window.mainloop()
